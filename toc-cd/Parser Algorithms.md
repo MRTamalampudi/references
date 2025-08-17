@@ -3,13 +3,13 @@ Computation of Closure
 $I$ is a set of items for a grammar $G$, then $CLOSURE(I)$ :
 
 ```
-CLOSURE(I) {
+setOfItems CLOSURE(I) {
 	J=I;
 	repeat
-		for ( each item A -> ɑ.Bβ in J )
-			for ( each production B -> γ of G)
-				if ( B -> .γ is not in J)
-					add B -> .γ to J;
+		for ( each item [A -> α.Bβ] in J )
+			for ( each production [B -> γ] of G)
+				if ( [B -> .γ] is not in J)
+					add [B -> .γ] to J;
 	until no more items are added to J on one round;
 	return J
 }
@@ -31,7 +31,6 @@ void items(G'){
 ```
 
 $G'$  Augmented grammar | $X$  Grammar symbol
-
 
 LR-parsing Algorithm
 ---
@@ -58,6 +57,32 @@ while(1) {
 		call error-recovery routine;
 	}
 }
+```
+
+
+Constructing an SLR-parsing table
+---
+```
+INPUT: An augmented grammar G'.
+
+OUTPUT: The SLR-parsing table function ACTIONS and GOTO for G'
+
+METHOD:
+
+1. Construct C={I_0​,I_1​,…,I_n​}, the collection of sets of LR(0) items for G′.
+2. State i is constructed from I_i​. The parsing actions for state i are determined
+as follows: 
+	(a) If [A -> α.aβ] is in Ii​ and GOTO(I_i, a) = I_j, then set ACTION[i, a] to 
+	“shift j.” 
+	Here 'a' must be a terminal.
+	(b) If [A -> α.] is in I_i​, then set ACTION[i, a] to “reduce A→α” for all 'a'
+	in FOLLOW(A);here A may not be S'.
+	(c) If [S' -> S] is in I_i, then set ACTION[i, $] to “accept.” 
+	If any conflicting actions result from the above rules, we say the grammar
+	is not SLR(1). The algorithm fails to produce a parser in this case.
+3. The goto transitions for state i are constructed for all nonterminals A using the rule: If GOTO(I_i, A) = I_j, then GOTO[i, A] = j.    
+4. All entries not defined by rules (2) and (3) are made “error.”
+5. The initial state of the parser is the one constructed from the set of items containing [S' -> .S].
 ```
 References
 ---
