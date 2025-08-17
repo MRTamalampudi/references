@@ -30,10 +30,35 @@ void items(G'){
 }
 ```
 
+$G'$  Augmented grammar | $X$  Grammar symbol
 
-$G'$  Augmented grammar 
-$X$  Grammar symbol
 
+LR-parsing Algorithm
+---
+```
+INPUT: An input string w and an LR-parsing table with functions ACTION and GOTO for a grammar G
+
+OUTPUT: If w is in L(G), the reduction steps of a bottom-up parse for w; otherwise, an error indication.
+
+METHOD: Initially, the parser has S0 on its stack, where S0 is the initial state, and w$ in the input buffer.The parser then executes the program in following method
+
+let 'a' be the first symbol of 'w$';
+while(1) {
+	let s be the state on top of the stack;
+	if ( ACTION[s,a] =  shift t) {
+		push t onto the stack;
+		let a be the next input symbol;
+	} else if ( ACTION[s,a] =  reduce A -> β) {
+		pop |β| symbols off the stack;
+		let state t now be on top of the stack;
+		output the production A -> β;
+	} else if ( ACTION[s,a] = accept) {
+		break
+	} else {
+		call error-recovery routine;
+	}
+}
+```
 References
 ---
 [Compilers, Pearson New International Edition, 2nd edition](https://www.pearson.com/en-gb/subject-catalog/p/compilers-pearson-new-international-edition/P200000003568/9781292037233)
