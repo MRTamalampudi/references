@@ -1,4 +1,4 @@
-#### Computation of Closure
+Computation of Closure
 ---
 $I$ is a set of items for a grammar $G$, then $CLOSURE(I)$ :
 
